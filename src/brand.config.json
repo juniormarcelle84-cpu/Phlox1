@@ -1,0 +1,174 @@
+{
+  "name": "Phlox Togo",
+  "slogan": "Des produits tendance, simplement.",
+  "domain": "https://phlox-togo.com",
+  "paygateCallbackUrl": "https://phlox-togo.com/paygate-callback.php",
+  "AUTH_BACKEND": "mock",
+  "BILLING_PROVIDER": "paygate",
+  "KEY_MODE": "mock",
+  "currency": "FCFA",
+  "whatsappNumber": "+22893206003",
+  "whatsappUrlBase": "https://wa.me/22893206003",
+  "paymentLogos": {
+    "mixxByYas": "/logos/mixx-yas.png",
+    "floozMoney": "/logos/flooz-money.png",
+    "flooz": "/logos/flooz-money.png"
+  },
+  "prices": {
+    "proPlanMonthly": 5900,
+    "proPlanYearly": 57000
+  },
+  "colors": {
+    "bg": "#F5F5F7",
+    "surface": "#FFFFFF",
+    "ink": "#1D1D1F",
+    "muted": "#AAAAAA",
+    "text2": "#6E6E73",
+    "accent": "#007AFF",
+    "success": "#34C759",
+    "error": "#FF3B30",
+    "warning": "#FF9500"
+  },
+  "advantages": [
+    {
+      "key": "delivery",
+      "icon": "Truck",
+      "en": {
+        "title": "Delivery to Togo",
+        "description": "Fast home delivery or pick-up points across all regions."
+      },
+      "fr": {
+        "title": "Livraison au Togo",
+        "description": "Livraison rapide à domicile ou en point relais dans toutes les régions."
+      }
+    },
+    {
+      "key": "payment",
+      "icon": "CreditCard",
+      "en": {
+        "title": "Secure Payment",
+        "description": "Mixx by Yas, Flooz, Cash on Delivery (COD) secure payments."
+      },
+      "fr": {
+        "title": "Paiement Sécurisé",
+        "description": "Règlement sécurisé par Mixx by Yas, Flooz, ou à la livraison."
+      }
+    },
+    {
+      "key": "support",
+      "icon": "MessageSquare",
+      "en": {
+        "title": "WhatsApp Support",
+        "description": "Dedicated instant assistance on WhatsApp for your questions."
+      },
+      "fr": {
+        "title": "Support WhatsApp",
+        "description": "Une assistance instantanée et dédiée sur WhatsApp pour vos questions."
+      }
+    },
+    {
+      "key": "guarantee",
+      "icon": "ShieldCheck",
+      "en": {
+        "title": "Satisfaction Guaranteed",
+        "description": "Verify product quality on delivery before paying."
+      },
+      "fr": {
+        "title": "Garantie Satisfaction",
+        "description": "Vérifiez la qualité de votre produit à la livraison avant de payer."
+      }
+    }
+  ],
+  "categories": [
+    {
+      "id": "earphone",
+      "enName": "With Earphone",
+      "frName": "Écouteurs",
+      "color": "#1D1D1F",
+      "image": "/src/assets/images/category_earphone_1791055767919.jpg",
+      "tagline": "Enjoy"
+    },
+    {
+      "id": "watch",
+      "enName": "Wearable Gadget",
+      "frName": "Montres Connectées",
+      "color": "#007AFF",
+      "image": "/src/assets/images/category_watch_1791055778925.jpg",
+      "tagline": "New"
+    },
+    {
+      "id": "laptop",
+      "enName": "Devices Laptop",
+      "frName": "Ordinateurs",
+      "color": "#1D1D1F",
+      "image": "/src/assets/images/category_laptop_1791055787925.jpg",
+      "tagline": "Trend"
+    },
+    {
+      "id": "console",
+      "enName": "Gaming Console",
+      "frName": "Consoles de Jeux",
+      "color": "#6E6E73",
+      "image": "/src/assets/images/category_console_1791055796776.jpg",
+      "tagline": "Best"
+    },
+    {
+      "id": "vr",
+      "enName": "Game Oculus",
+      "frName": "Casques VR",
+      "color": "#007AFF",
+      "image": "/src/assets/images/category_vr_1791055806396.jpg",
+      "tagline": "Play"
+    },
+    {
+      "id": "speaker",
+      "enName": "Amazon Speaker",
+      "frName": "Enceintes Bluetooth",
+      "color": "#1D1D1F",
+      "image": "/src/assets/images/category_speaker_1791055819762.jpg",
+      "tagline": "Now"
+    }
+  ],
+  "faq": [
+    {
+      "en": {
+        "q": "How do I place an order?",
+        "a": "Add items to your cart, click 'Order on WhatsApp', fill in your delivery details, and send the pre-filled message. We will confirm your delivery date."
+      },
+      "fr": {
+        "q": "Comment puis-je passer une commande ?",
+        "a": "Ajoutez des articles à votre panier, cliquez sur 'Commander sur WhatsApp', renseignez vos informations de livraison et envoyez le message pré-rempli. Nous confirmerons la date de livraison."
+      }
+    },
+    {
+      "en": {
+        "q": "What are the payment methods?",
+        "a": "We accept Mixx by Yas, Flooz, or Cash on Delivery (payment upon receipt in hand)."
+      },
+      "fr": {
+        "q": "Quels sont les moyens de paiement acceptés ?",
+        "a": "Nous acceptons les paiements par Mixx by Yas, Flooz, ou directement en espèces à la livraison (paiement à la réception)."
+      }
+    },
+    {
+      "en": {
+        "q": "What is the delivery time in Togo?",
+        "a": "In Lomé, delivery takes 24 hours. For other cities (Atakpamé, Kpalimé, Sokodé, Kara, Dapaong), it takes 48 to 72 hours."
+      },
+      "fr": {
+        "q": "Quel est le délai de livraison au Togo ?",
+        "a": "À Lomé, la livraison est effectuée en 24h. Pour les autres villes (Atakpamé, Kpalimé, Sokodé, Kara, Dapaong), elle prend entre 48h et 72h."
+      }
+    },
+    {
+      "en": {
+        "q": "Can I inspect the product before paying?",
+        "a": "Yes! Our 'Garantie Satisfaction' allows you to open, test, and verify the quality of the product with the delivery agent before paying."
+      },
+      "fr": {
+        "q": "Puis-je inspecter le produit avant de payer ?",
+        "a": "Oui absolument ! Notre 'Garantie Satisfaction' vous permet d'ouvrir, tester et vérifier la qualité du produit en présence du livreur avant d'effectuer le règlement."
+      }
+    }
+  ]
+}

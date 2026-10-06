@@ -1,0 +1,4 @@
+<FilesMatch "\.(json|log|db|lock|sqlite|md|env)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

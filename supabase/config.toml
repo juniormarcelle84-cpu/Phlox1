@@ -1,0 +1,10 @@
+# Supabase Config for Phlox Togo Edge Functions
+
+[functions.create-payment]
+verify_jwt = false
+
+[functions.order-status]
+verify_jwt = false
+
+[functions.paygate-callback]
+verify_jwt = false

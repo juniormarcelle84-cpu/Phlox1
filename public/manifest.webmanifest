@@ -1,0 +1,28 @@
+{
+  "id": "/",
+  "name": "Phlox Togo - Boutique E-Commerce Premium",
+  "short_name": "Phlox Togo",
+  "description": "Boutique e-commerce premium au Togo - Des produits tendance, simplement. Commandez sur WhatsApp des casques, montres, ordinateurs et consoles.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F5F5F7",
+  "theme_color": "#F5F5F7",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["shopping", "electronics", "lifestyle"],
+  "lang": "fr"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Phlox Togo",
+  "description": "Boutique e-commerce premium au Togo - Des produits tendance, simplement. Commandez instantanément sur WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

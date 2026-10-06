@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="appleModernGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#007AFF" />
+      <stop offset="100%" stop-color="#0056B3" />
+    </linearGradient>
+    <linearGradient id="darkBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2C2C2E" />
+      <stop offset="100%" stop-color="#1D1D1F" />
+    </linearGradient>
+  </defs>
+  <!-- Background with rounded square for maskable icon safe zone -->
+  <rect width="512" height="512" rx="128" fill="url(#darkBg)" />
+  
+  <!-- Outer glowing accent ring -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="url(#appleModernGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="800 200" opacity="0.9" />
+
+  <!-- Stylized Modern Headphones Brand Shape -->
+  <path d="M160 270 C160 170 352 170 352 270" fill="none" stroke="#FFFFFF" stroke-width="24" stroke-linecap="round" />
+  
+  <!-- Left Ear Cup -->
+  <rect x="136" y="250" width="48" height="96" rx="24" fill="#007AFF" />
+  <rect x="156" y="266" width="16" height="64" rx="8" fill="#FFFFFF" opacity="0.4" />
+  
+  <!-- Right Ear Cup -->
+  <rect x="328" y="250" width="48" height="96" rx="24" fill="#007AFF" />
+  <rect x="340" y="266" width="16" height="64" rx="8" fill="#FFFFFF" opacity="0.4" />
+
+  <!-- Center Accent -->
+  <circle cx="256" cy="285" r="16" fill="#007AFF" />
+</svg>
