@@ -16,6 +16,8 @@ import {
 import { Product } from '../types';
 import { translations, Lang, formatPrice } from '../services/i18n';
 import { decrementSearchQuota, getSearchQuota, subscribeToPro, FALLBACK_PRODUCT_IMAGE } from '../services/storeService';
+import { TiltCard } from '../components/TiltCard';
+import { LazyImage } from '../components/LazyImage';
 import brandConfig from '../brand.config.json';
 
 interface CatalogViewProps {
@@ -48,10 +50,12 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
   const t = translations[lang];
 
   // Search, Filters & Sorting state
+  const DEFAULT_MAX_PRICE = 1000000;
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSearch, setActiveSearch] = useState('');
   const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc' | 'popular'>('default');
-  const [priceRange, setPriceRange] = useState<number>(1000000);
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(DEFAULT_MAX_PRICE);
   const [inStockOnly, setInStockOnly] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 6;
@@ -62,6 +66,14 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
   const [isAiSearching, setIsAiSearching] = useState(false);
   const [aiResultText, setAiResultText] = useState<string | null>(null);
   const [isProSelectedYearly, setIsProSelectedYearly] = useState(true);
+
+  const pricePresets = [
+    { label: 'Tous', min: 0, max: DEFAULT_MAX_PRICE },
+    { label: '< 30k', min: 0, max: 30000 },
+    { label: '30k - 75k', min: 30000, max: 75000 },
+    { label: '75k - 200k', min: 75000, max: 200000 },
+    { label: '> 200k', min: 200000, max: DEFAULT_MAX_PRICE }
+  ];
 
   useEffect(() => {
     setQuota(getSearchQuota());
@@ -144,11 +156,14 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
     setActiveSearch('');
     setSelectedCategory('all');
     setSortBy('default');
-    setPriceRange(1000000);
+    setMinPrice(0);
+    setMaxPrice(DEFAULT_MAX_PRICE);
     setInStockOnly(false);
     setCurrentPage(1);
     setAiResultText(null);
   };
+
+  const isPriceFiltered = minPrice > 0 || maxPrice < DEFAULT_MAX_PRICE;
 
   const filteredProducts = products.filter((p) => {
     const matchesCategory = selectedCategory === 'all' || p.category === selectedCategory;
@@ -157,7 +172,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
       p.name.toLowerCase().includes(activeSearch.toLowerCase()) ||
       p.descriptionFr.toLowerCase().includes(activeSearch.toLowerCase()) ||
       p.descriptionEn.toLowerCase().includes(activeSearch.toLowerCase());
-    const matchesPrice = p.price <= priceRange;
+    const matchesPrice = p.price >= minPrice && p.price <= maxPrice;
     const matchesStock = inStockOnly ? p.stock > 0 : true;
     return matchesCategory && matchesSearch && matchesPrice && matchesStock;
   });
@@ -187,10 +202,10 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
       {/* Header Info */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl sm:text-3xl font-black uppercase tracking-tight text-[#1D1D1F]">
+          <h2 className="text-xl sm:text-3xl font-black uppercase tracking-tight text-white">
             Catalogue de Produits
           </h2>
-          <p className="text-xs text-[#6E6E73] mt-0.5">
+          <p className="text-xs text-[#C5D4CA] mt-0.5">
             Filtrer, trier et commander en toute sécurité au Togo
           </p>
         </div>
@@ -199,15 +214,15 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
         {userPlan.plan === 'free' ? (
           <button
             onClick={() => setShowPaywall(true)}
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-white border border-[#AAAAAA]/30 hover:border-[#007AFF] rounded-full text-xs font-bold text-[#1D1D1F] transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2.5 bg-[#312F30] border border-white/15 hover:border-[#7477FF] rounded-full text-xs font-bold text-white transition-colors cursor-pointer"
           >
-            <Sparkles size={14} className="text-[#007AFF]" />
+            <Sparkles size={14} className="text-[#F9CD61]" />
             <span>
               {quota.remaining}/{quota.limit} recherches IA
             </span>
           </button>
         ) : (
-          <div className="flex items-center gap-1.5 px-4 py-2.5 bg-[#007AFF]/10 text-[#007AFF] border border-[#007AFF]/30 rounded-full text-xs font-black uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 px-4 py-2.5 bg-[#7477FF]/20 text-[#7477FF] border border-[#7477FF]/30 rounded-full text-xs font-black uppercase tracking-wider">
             <Sparkles size={14} />
             <span>{t.activeProBadge}</span>
           </div>
@@ -215,16 +230,16 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
       </div>
 
       {/* SEARCH AND AI SEARCH SECTION */}
-      <div className="bg-white p-4 sm:p-6 rounded-[28px] space-y-3 border border-[#AAAAAA]/25 text-[#1D1D1F]">
+      <div className="bg-[#312F30] p-4 sm:p-6 rounded-[28px] space-y-3 border border-white/10 text-white">
         <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-2.5">
           <div className="relative w-full flex-1">
-            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6E6E73]" size={18} />
+            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C5D4CA]/60" size={18} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Rechercher un produit"
-              className="w-full bg-[#F5F5F7] text-[#1D1D1F] placeholder:text-[#6E6E73] text-sm pl-11 pr-10 py-3.5 rounded-full border border-[#AAAAAA]/30 focus:border-[#007AFF] focus:outline-hidden min-h-[48px]"
+              placeholder="Rechercher un produit (ex: iPhone, montre, casque, PC...)"
+              className="w-full bg-[#1B1A1B] text-white placeholder:text-[#C5D4CA]/50 text-sm pl-11 pr-10 py-3.5 rounded-full border border-white/15 focus:border-[#7477FF] focus:outline-hidden min-h-[48px]"
             />
             {searchQuery && (
               <button
@@ -233,7 +248,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                   setSearchQuery('');
                   setActiveSearch('');
                 }}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#6E6E73] hover:text-[#1D1D1F] p-1 rounded-full cursor-pointer"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#C5D4CA] hover:text-white p-1 rounded-full cursor-pointer"
                 aria-label="Effacer la recherche"
               >
                 <X size={15} />
@@ -244,7 +259,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
           <div className="grid grid-cols-2 sm:flex gap-2 w-full sm:w-auto shrink-0">
             <button
               type="submit"
-              className="px-6 py-3.5 bg-[#007AFF] hover:bg-[#0071EB] text-white font-bold uppercase tracking-wider text-xs rounded-full transition-colors cursor-pointer text-center min-h-[48px]"
+              className="px-6 py-3.5 bg-[#7477FF] hover:bg-[#5E62FF] text-white font-black uppercase tracking-wider text-xs rounded-full transition-colors cursor-pointer text-center min-h-[48px] shadow-md"
             >
               Rechercher
             </button>
@@ -252,21 +267,21 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
               type="button"
               disabled={!searchQuery.trim() || isAiSearching}
               onClick={() => handleAiSearch()}
-              className={`px-5 py-3.5 rounded-full font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer min-h-[48px] ${
+              className={`px-5 py-3.5 rounded-full font-black uppercase tracking-wider text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer min-h-[48px] ${
                 searchQuery.trim()
-                  ? 'bg-white border border-[#AAAAAA] hover:bg-[#F5F5F7] text-[#1D1D1F]'
-                  : 'bg-[#AAAAAA]/35 text-[#1D1D1F]/50 cursor-not-allowed'
+                  ? 'bg-[#1B1A1B] border border-white/20 hover:bg-[#7477FF] text-white'
+                  : 'bg-white/5 text-white/30 cursor-not-allowed border border-white/5'
               }`}
             >
-              <Sparkles size={14} className={isAiSearching ? 'animate-spin text-[#007AFF]' : 'text-[#007AFF]'} />
+              <Sparkles size={14} className={isAiSearching ? 'animate-spin text-[#F9CD61]' : 'text-[#F9CD61]'} />
               <span>{isAiSearching ? '...' : 'Conseil IA'}</span>
             </button>
           </div>
         </form>
 
         {/* Quick query tags */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-0.5 text-xs">
-          <span className="text-[#6E6E73] shrink-0 font-bold text-[11px] uppercase tracking-wider">Suggestions :</span>
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-0.5 text-xs no-scrollbar">
+          <span className="text-[#C5D4CA] shrink-0 font-bold text-[11px] uppercase tracking-wider">Suggestions :</span>
           {quickQueries.map((item, idx) => (
             <button
               key={idx}
@@ -275,7 +290,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                 setSearchQuery(item.query);
                 handleAiSearch(item.query);
               }}
-              className="px-3.5 py-1.5 bg-[#F5F5F7] hover:bg-[#007AFF] text-[#1D1D1F] hover:text-white border border-[#AAAAAA]/30 rounded-full shrink-0 font-medium transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 bg-[#1B1A1B] hover:bg-[#7477FF] text-[#FFFFFF] border border-white/10 rounded-full shrink-0 font-bold text-[11px] transition-colors cursor-pointer"
             >
               {item.label}
             </button>
@@ -284,8 +299,8 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
 
         {/* AI Recommendations Banner */}
         {aiResultText && (
-          <div className="p-4 bg-[#007AFF]/10 border border-[#007AFF]/25 rounded-[20px] text-xs sm:text-sm text-[#1D1D1F] animate-fadeIn flex items-start gap-3">
-            <Sparkles size={16} className="text-[#007AFF] shrink-0 mt-0.5" />
+          <div className="p-4 bg-[#7477FF]/15 border border-[#7477FF]/30 rounded-[20px] text-xs sm:text-sm text-white animate-fadeIn flex items-start gap-3">
+            <Sparkles size={16} className="text-[#F9CD61] shrink-0 mt-0.5" />
             <p className="leading-relaxed">{aiResultText}</p>
           </div>
         )}
@@ -294,19 +309,19 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
       {/* FILTERS & PRODUCTS GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Sidebar Filters */}
-        <div className="lg:col-span-1 bg-white p-4 sm:p-5 rounded-[28px] space-y-4 self-start border border-[#AAAAAA]/25 text-[#1D1D1F]">
+        <div className="lg:col-span-1 bg-[#312F30] p-4 sm:p-5 rounded-[28px] space-y-4 self-start border border-white/10 text-white">
           <div className="flex items-center justify-between">
-            <h3 className="font-black uppercase text-xs tracking-wider text-[#1D1D1F] flex items-center gap-1.5">
-              <Filter size={14} className="text-[#007AFF]" /> Filtres
+            <h3 className="font-black uppercase text-xs tracking-wider text-white flex items-center gap-1.5">
+              <Filter size={14} className="text-[#7477FF]" /> Filtres
             </h3>
             {(activeSearch ||
               selectedCategory !== 'all' ||
               sortBy !== 'default' ||
-              priceRange < 1000000 ||
+              isPriceFiltered ||
               inStockOnly) && (
               <button
                 onClick={handleResetFilters}
-                className="text-xs text-[#007AFF] hover:underline cursor-pointer font-bold"
+                className="text-xs text-[#7477FF] hover:underline cursor-pointer font-bold"
               >
                 Réinitialiser
               </button>
@@ -315,16 +330,16 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
 
           {/* Categories */}
           <div className="space-y-1.5">
-            <span className="block text-[11px] font-bold uppercase text-[#6E6E73] tracking-wider">
+            <span className="block text-[11px] font-bold uppercase text-[#C5D4CA] tracking-wider">
               Catégorie
             </span>
-            <div className="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0">
+            <div className="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0 no-scrollbar">
               <button
                 onClick={() => setSelectedCategory('all')}
                 className={`text-left text-xs font-bold px-3.5 py-2.5 rounded-full transition-colors cursor-pointer shrink-0 ${
                   selectedCategory === 'all'
-                    ? 'bg-[#007AFF] text-white'
-                    : 'bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#F5F5F7]/70 border border-[#AAAAAA]/30'
+                    ? 'bg-[#7477FF] text-white'
+                    : 'bg-[#1B1A1B] text-[#FFFFFF] hover:bg-[#1B1A1B]/70 border border-white/10'
                 }`}
               >
                 Toutes
@@ -337,14 +352,14 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                     onClick={() => setSelectedCategory(c.id)}
                     className={`text-left text-xs font-bold px-3.5 py-2.5 rounded-full transition-colors cursor-pointer flex items-center justify-between gap-2 shrink-0 ${
                       isSelected
-                        ? 'bg-[#007AFF] text-white'
-                        : 'bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#F5F5F7]/70 border border-[#AAAAAA]/30'
+                        ? 'bg-[#7477FF] text-white'
+                        : 'bg-[#1B1A1B] text-[#FFFFFF] hover:bg-[#1B1A1B]/70 border border-white/10'
                     }`}
                   >
                     <span>{c.frName}</span>
                     <span
                       className="w-2 h-2 rounded-full shrink-0 hidden lg:inline-block"
-                      style={{ backgroundColor: isSelected ? '#FFFFFF' : '#007AFF' }}
+                      style={{ backgroundColor: isSelected ? '#FFFFFF' : '#7477FF' }}
                     />
                   </button>
                 );
@@ -353,44 +368,165 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
           </div>
 
           {/* In stock toggle */}
-          <div className="pt-3 border-t border-[#AAAAAA]/25">
-            <label className="flex items-center justify-between text-xs font-semibold text-[#1D1D1F] cursor-pointer">
+          <div className="pt-3 border-t border-white/10">
+            <label className="flex items-center justify-between text-xs font-bold text-white cursor-pointer">
               <span>{t.inStockOnly}</span>
               <input
                 type="checkbox"
                 checked={inStockOnly}
                 onChange={(e) => setInStockOnly(e.target.checked)}
-                className="w-4 h-4 accent-[#007AFF] cursor-pointer"
+                className="w-4 h-4 accent-[#7477FF] cursor-pointer"
               />
             </label>
           </div>
 
-          {/* Price Range */}
-          <div className="space-y-1.5 pt-3 border-t border-[#AAAAAA]/25">
-            <div className="flex items-center justify-between text-xs font-bold text-[#6E6E73]">
-              <span>Prix Max</span>
-              <span className="text-[#007AFF] font-mono tabular-nums font-black">{formatPrice(priceRange)}</span>
+          {/* Price Range (Min / Max) */}
+          <div className="space-y-3 pt-3 border-t border-white/10">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold uppercase text-[#C5D4CA] tracking-wider">
+                Fourchette de Prix
+              </span>
+              {isPriceFiltered && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMinPrice(0);
+                    setMaxPrice(DEFAULT_MAX_PRICE);
+                  }}
+                  className="text-[10px] text-[#7477FF] hover:underline font-bold cursor-pointer"
+                >
+                  Effacer
+                </button>
+              )}
             </div>
-            <input
-              type="range"
-              min={10000}
-              max={1000000}
-              step={10000}
-              value={priceRange}
-              onChange={(e) => setPriceRange(Number(e.target.value))}
-              className="w-full accent-[#007AFF] cursor-pointer"
-            />
+
+            {/* Tranches rapides (presets) */}
+            <div className="grid grid-cols-2 gap-1.5">
+              {pricePresets.map((preset, idx) => {
+                const isActive = minPrice === preset.min && maxPrice === preset.max;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setMinPrice(preset.min);
+                      setMaxPrice(preset.max);
+                      setCurrentPage(1);
+                    }}
+                    className={`text-[11px] font-bold py-1.5 px-2 rounded-full border transition-all cursor-pointer truncate ${
+                      isActive
+                        ? 'bg-[#7477FF] text-white border-[#7477FF]'
+                        : 'bg-[#1B1A1B] text-[#FFFFFF] border-white/10 hover:border-[#7477FF]/50'
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Formatted range indicator */}
+            <div className="bg-[#1B1A1B] p-2.5 rounded-2xl border border-white/10 text-center">
+              <span className="text-[10px] text-[#C5D4CA] uppercase font-bold tracking-wider block">Intervalle sélectionné</span>
+              <span className="text-xs font-black text-[#F9CD61] font-mono tabular-nums">
+                {formatPrice(minPrice)} &mdash; {maxPrice >= DEFAULT_MAX_PRICE ? 'Illimité' : formatPrice(maxPrice)}
+              </span>
+            </div>
+
+            {/* Saisie manuelle Min et Max */}
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="text-[10px] uppercase font-bold text-[#C5D4CA] mb-1 block">Min (FCFA)</label>
+                <input
+                  type="number"
+                  min={0}
+                  max={maxPrice}
+                  step={5000}
+                  value={minPrice === 0 ? '' : minPrice}
+                  placeholder="0"
+                  onChange={(e) => {
+                    const val = Math.max(0, Number(e.target.value) || 0);
+                    setMinPrice(Math.min(val, maxPrice));
+                    setCurrentPage(1);
+                  }}
+                  className="w-full bg-[#1B1A1B] text-white text-xs font-semibold px-2.5 py-2 rounded-xl border border-white/15 focus:border-[#7477FF] focus:outline-hidden"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] uppercase font-bold text-[#C5D4CA] mb-1 block">Max (FCFA)</label>
+                <input
+                  type="number"
+                  min={minPrice}
+                  max={DEFAULT_MAX_PRICE}
+                  step={5000}
+                  value={maxPrice >= DEFAULT_MAX_PRICE ? '' : maxPrice}
+                  placeholder="Max"
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    if (!e.target.value) {
+                      setMaxPrice(DEFAULT_MAX_PRICE);
+                    } else {
+                      setMaxPrice(Math.max(minPrice, val));
+                    }
+                    setCurrentPage(1);
+                  }}
+                  className="w-full bg-[#1B1A1B] text-white text-xs font-semibold px-2.5 py-2 rounded-xl border border-white/15 focus:border-[#7477FF] focus:outline-hidden"
+                />
+              </div>
+            </div>
+
+            {/* Sliders synchronisés */}
+            <div className="space-y-2 pt-1">
+              <div>
+                <div className="flex justify-between text-[10px] text-[#C5D4CA] font-semibold mb-0.5">
+                  <span>Curseur Min</span>
+                  <span className="font-mono text-[#F9CD61] font-bold">{formatPrice(minPrice)}</span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={Math.min(DEFAULT_MAX_PRICE - 10000, maxPrice)}
+                  step={5000}
+                  value={minPrice}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    setMinPrice(Math.min(val, maxPrice - 5000));
+                    setCurrentPage(1);
+                  }}
+                  className="w-full accent-[#7477FF] cursor-pointer"
+                />
+              </div>
+              <div>
+                <div className="flex justify-between text-[10px] text-[#C5D4CA] font-semibold mb-0.5">
+                  <span>Curseur Max</span>
+                  <span className="font-mono text-[#F9CD61] font-bold">{maxPrice >= DEFAULT_MAX_PRICE ? '1 000 000+ F' : formatPrice(maxPrice)}</span>
+                </div>
+                <input
+                  type="range"
+                  min={minPrice + 5000}
+                  max={DEFAULT_MAX_PRICE}
+                  step={5000}
+                  value={maxPrice}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    setMaxPrice(Math.max(val, minPrice + 5000));
+                    setCurrentPage(1);
+                  }}
+                  className="w-full accent-[#7477FF] cursor-pointer"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Sort selection */}
-          <div className="space-y-1.5 pt-3 border-t border-[#AAAAAA]/25">
-            <span className="text-[11px] font-bold uppercase text-[#6E6E73] tracking-wider flex items-center gap-1">
-              <ArrowUpDown size={12} className="text-[#007AFF]" /> Trier par
+          <div className="space-y-1.5 pt-3 border-t border-white/10">
+            <span className="text-[11px] font-bold uppercase text-[#C5D4CA] tracking-wider flex items-center gap-1">
+              <ArrowUpDown size={12} className="text-[#7477FF]" /> Trier par
             </span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-              className="w-full bg-[#F5F5F7] text-[#1D1D1F] text-xs font-semibold px-3 py-2.5 rounded-full border border-[#AAAAAA]/30 focus:border-[#007AFF] focus:outline-hidden cursor-pointer"
+              className="w-full bg-[#1B1A1B] text-white text-xs font-semibold px-3 py-2.5 rounded-full border border-white/15 focus:border-[#7477FF] focus:outline-hidden cursor-pointer"
             >
               <option value="default">Recommandé</option>
               <option value="price-asc">Prix : Croissant</option>
@@ -402,21 +538,94 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
 
         {/* PRODUCTS GRID */}
         <div className="lg:col-span-3 space-y-6">
-          {activeSearch && (
-            <div className="text-xs text-[#6E6E73]">
-              Résultats pour <span className="font-bold text-[#007AFF]">&ldquo;{activeSearch}&rdquo;</span> ({sortedProducts.length} produits)
+          {/* Active filter badges toolbar */}
+          {(activeSearch || selectedCategory !== 'all' || isPriceFiltered || inStockOnly) && (
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="text-[#C5D4CA] font-bold text-[11px] uppercase tracking-wider">Filtres actifs :</span>
+              
+              {activeSearch && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#312F30] border border-white/15 rounded-full font-semibold text-white">
+                  Recherche : &ldquo;{activeSearch}&rdquo;
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveSearch('');
+                      setSearchQuery('');
+                    }}
+                    className="hover:text-[#7477FF] cursor-pointer"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {selectedCategory !== 'all' && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#312F30] border border-white/15 rounded-full font-semibold text-white">
+                  Catégorie : {brandConfig.categories.find(c => c.id === selectedCategory)?.frName || selectedCategory}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCategory('all')}
+                    className="hover:text-[#7477FF] cursor-pointer"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {isPriceFiltered && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#7477FF]/20 border border-[#7477FF]/30 text-[#7477FF] rounded-full font-semibold">
+                  Prix : {formatPrice(minPrice)} &mdash; {maxPrice >= DEFAULT_MAX_PRICE ? 'Illimité' : formatPrice(maxPrice)}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMinPrice(0);
+                      setMaxPrice(DEFAULT_MAX_PRICE);
+                    }}
+                    className="hover:text-white cursor-pointer"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {inStockOnly && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#312F30] border border-white/15 rounded-full font-semibold text-white">
+                  En stock uniquement
+                  <button
+                    type="button"
+                    onClick={() => setInStockOnly(false)}
+                    className="hover:text-[#7477FF] cursor-pointer"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="text-[#7477FF] hover:underline font-bold text-xs ml-auto cursor-pointer"
+              >
+                Tout effacer
+              </button>
+            </div>
+          )}
+
+          {activeSearch && !(selectedCategory !== 'all' || isPriceFiltered || inStockOnly) && (
+            <div className="text-xs text-[#C5D4CA]">
+              Résultats pour <span className="font-bold text-[#F9CD61]">&ldquo;{activeSearch}&rdquo;</span> ({sortedProducts.length} produits)
             </div>
           )}
 
           {sortedProducts.length === 0 ? (
-            <div className="bg-white p-8 sm:p-12 rounded-[28px] text-center space-y-4 border border-[#AAAAAA]/25 text-[#1D1D1F]">
-              <div className="w-14 h-14 rounded-full bg-[#F5F5F7] flex items-center justify-center mx-auto text-[#007AFF]">
+            <div className="bg-[#312F30] p-8 sm:p-12 rounded-[28px] text-center space-y-4 border border-white/10 text-white">
+              <div className="w-14 h-14 rounded-full bg-[#1B1A1B] flex items-center justify-center mx-auto text-[#7477FF]">
                 <ShieldAlert size={26} />
               </div>
-              <h4 className="text-base font-black uppercase tracking-tight text-[#1D1D1F]">{t.searchNoResult}</h4>
+              <h4 className="text-base font-black uppercase tracking-tight text-white">{t.searchNoResult}</h4>
               <button
                 onClick={handleResetFilters}
-                className="px-6 py-3 bg-[#007AFF] hover:bg-[#0071EB] text-white font-bold uppercase text-xs rounded-full transition-colors cursor-pointer"
+                className="px-6 py-3 bg-[#7477FF] hover:bg-[#5E62FF] text-white font-black uppercase text-xs rounded-full transition-colors cursor-pointer"
               >
                 Réinitialiser les filtres
               </button>
@@ -430,16 +639,19 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                   const isAdded = justAddedId === p.id;
 
                   return (
-                    <div
+                    <TiltCard
                       key={p.id}
                       onClick={() => onSelectProduct(p)}
-                      className="group bg-white rounded-[28px] p-3 sm:p-4 flex flex-col justify-between cursor-pointer border border-[#AAAAAA]/25 hover:border-[#007AFF]/50 transition-all text-[#1D1D1F]"
+                      maxTilt={8}
+                      scale={1.03}
+                      perspective={900}
+                      className="group bg-[#312F30] rounded-[28px] p-3 sm:p-4 flex flex-col justify-between cursor-pointer border border-white/10 hover:border-[#7477FF]/60 hover:shadow-2xl transition-all text-white shadow-md transform-gpu"
                     >
                       <div>
                         {/* Image Container */}
-                        <div className="relative aspect-square bg-[#F5F5F7] rounded-[20px] overflow-hidden flex items-center justify-center mb-2.5">
+                        <div className="relative aspect-square bg-[#1B1A1B] rounded-[20px] overflow-hidden flex items-center justify-center mb-2.5">
                           {p.isPromo && (
-                            <span className="absolute top-2 left-2 z-10 bg-[#007AFF] text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">
+                            <span className="absolute top-2 left-2 z-10 bg-[#7477FF] text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-sm">
                               Promo
                             </span>
                           )}
@@ -452,12 +664,12 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                                   e.stopPropagation();
                                   onToggleWishlist(p.id);
                                 }}
-                                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-[#6E6E73] hover:text-[#007AFF] shadow-xs flex items-center justify-center cursor-pointer border border-[#AAAAAA]/20"
+                                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#312F30]/90 hover:bg-[#312F30] text-[#C5D4CA] hover:text-[#7477FF] shadow-xs flex items-center justify-center cursor-pointer border border-white/10"
                                 aria-label="Favoris"
                               >
                                 <Heart
                                   size={14}
-                                  className={isFav ? 'text-[#007AFF] fill-[#007AFF]' : ''}
+                                  className={isFav ? 'text-[#7477FF] fill-[#7477FF]' : ''}
                                 />
                               </button>
                               <button
@@ -466,7 +678,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                                   e.stopPropagation();
                                   onSelectProduct(p);
                                 }}
-                                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-[#6E6E73] hover:text-[#007AFF] shadow-xs flex items-center justify-center cursor-pointer border border-[#AAAAAA]/20"
+                                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#312F30]/90 hover:bg-[#312F30] text-[#C5D4CA] hover:text-[#7477FF] shadow-xs flex items-center justify-center cursor-pointer border border-white/10"
                                 aria-label="Aperçu rapide"
                               >
                                 <Eye size={14} />
@@ -474,21 +686,16 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                             </div>
                           )}
 
-                          <img
+                          <LazyImage
                             src={p.image}
                             alt={p.name}
-                            loading="lazy"
-                            decoding="async"
-                            referrerPolicy="no-referrer"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = FALLBACK_PRODUCT_IMAGE;
-                            }}
+                            wrapperClassName="w-full h-full"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
 
                           {isOutOfStock && (
-                            <div className="absolute inset-0 bg-[#1D1D1F]/75 flex items-center justify-center p-2">
-                              <span className="text-[10px] font-black uppercase text-white bg-[#FF3B30] px-2.5 py-1 rounded-full text-center">
+                            <div className="absolute inset-0 bg-[#1B1A1B]/80 flex items-center justify-center p-2">
+                              <span className="text-[10px] font-black uppercase text-white bg-[#F66554] px-2.5 py-1 rounded-full text-center">
                                 Rupture
                               </span>
                             </div>
@@ -496,17 +703,17 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                         </div>
 
                         {/* Nom sur 2 lignes max */}
-                        <h4 className="text-xs sm:text-sm font-bold text-[#1D1D1F] line-clamp-2 min-h-[2.25rem] sm:min-h-[2.5rem] leading-snug group-hover:text-[#007AFF] transition-colors">
+                        <h4 className="text-xs sm:text-sm font-bold text-white line-clamp-2 min-h-[2.25rem] sm:min-h-[2.5rem] leading-snug group-hover:text-[#7477FF] transition-colors">
                           {p.name}
                         </h4>
 
                         {/* Prix dessous */}
                         <div className="mt-1 mb-2.5">
-                          <div className="text-xs sm:text-sm font-black text-[#1D1D1F] font-mono tabular-nums">
+                          <div className="text-xs sm:text-sm font-black text-[#F9CD61] font-mono tabular-nums">
                             {formatPrice(p.price)}
                           </div>
                           {p.originalPrice && (
-                            <div className="text-[10px] sm:text-xs line-through text-[#6E6E73] font-mono tabular-nums">
+                            <div className="text-[10px] sm:text-xs line-through text-[#C5D4CA]/60 font-mono tabular-nums">
                               {formatPrice(p.originalPrice)}
                             </div>
                           )}
@@ -525,18 +732,18 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                             onSelectProduct(p);
                           }
                         }}
-                        className={`w-full py-2.5 px-3 rounded-full text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1 transition-colors cursor-pointer min-h-[42px] ${
+                        className={`w-full py-2.5 px-3 rounded-full text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1 transition-colors cursor-pointer min-h-[42px] ${
                           isOutOfStock
-                            ? 'bg-[#AAAAAA]/35 text-[#1D1D1F]/50 cursor-not-allowed'
+                            ? 'bg-white/5 text-white/30 cursor-not-allowed border border-white/5'
                             : isAdded
-                            ? 'bg-[#34C759] text-white'
-                            : 'bg-[#007AFF] hover:bg-[#0071EB] text-white'
+                            ? 'bg-[#F9CD61] text-[#1B1A1B]'
+                            : 'bg-[#7477FF] hover:bg-[#5E62FF] text-white shadow-xs'
                         }`}
                       >
                         <Plus size={14} />
                         <span>{isAdded ? 'Ajouté' : 'Ajouter'}</span>
                       </button>
-                    </div>
+                    </TiltCard>
                   );
                 })}
               </div>
@@ -548,7 +755,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                     type="button"
                     disabled={safePage <= 1}
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    className="p-2.5 bg-white text-[#1D1D1F] border border-[#AAAAAA]/30 rounded-full disabled:opacity-30 hover:bg-[#F5F5F7] transition-colors cursor-pointer"
+                    className="p-2.5 bg-[#312F30] text-white border border-white/10 rounded-full disabled:opacity-30 hover:bg-[#1B1A1B] transition-colors cursor-pointer"
                     aria-label="Page précédente"
                   >
                     <ChevronLeft size={16} />
@@ -560,8 +767,8 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                       onClick={() => setCurrentPage(pageNum)}
                       className={`w-9 h-9 rounded-full text-xs font-black transition-colors cursor-pointer ${
                         safePage === pageNum
-                          ? 'bg-[#007AFF] text-white'
-                          : 'bg-white text-[#1D1D1F] border border-[#AAAAAA]/30 hover:bg-[#F5F5F7]'
+                          ? 'bg-[#7477FF] text-white'
+                          : 'bg-[#312F30] text-white border border-white/10 hover:bg-[#1B1A1B]'
                       }`}
                     >
                       {pageNum}
@@ -571,7 +778,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                     type="button"
                     disabled={safePage >= totalPages}
                     onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    className="p-2.5 bg-white text-[#1D1D1F] border border-[#AAAAAA]/30 rounded-full disabled:opacity-30 hover:bg-[#F5F5F7] transition-colors cursor-pointer"
+                    className="p-2.5 bg-[#312F30] text-white border border-white/10 rounded-full disabled:opacity-30 hover:bg-[#1B1A1B] transition-colors cursor-pointer"
                     aria-label="Page suivante"
                   >
                     <ChevronRight size={16} />
@@ -586,30 +793,30 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
       {/* PRO PAYWALL MODAL */}
       {showPaywall && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1D1D1F]/45 backdrop-blur-sm animate-fadeIn"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1B1A1B]/80 backdrop-blur-md animate-fadeIn"
           role="dialog"
           aria-modal="true"
         >
-          <div className="relative w-full max-w-md bg-white rounded-[28px] overflow-hidden p-6 text-[#1D1D1F] text-center border border-[#AAAAAA]/30 shadow-2xl">
+          <div className="relative w-full max-w-md bg-[#312F30] rounded-[28px] overflow-hidden p-6 text-white text-center border border-white/15 shadow-2xl">
             <button
               onClick={() => setShowPaywall(false)}
-              className="absolute top-4 right-4 p-2 text-[#6E6E73] hover:text-[#1D1D1F] rounded-full bg-[#F5F5F7] cursor-pointer"
+              className="absolute top-4 right-4 p-2 text-[#C5D4CA] hover:text-white rounded-full bg-[#1B1A1B] cursor-pointer"
               aria-label={t.close}
             >
               <X size={18} />
             </button>
 
-            <div className="w-14 h-14 bg-[#007AFF]/10 text-[#007AFF] rounded-full flex items-center justify-center mx-auto mb-3">
+            <div className="w-14 h-14 bg-[#7477FF]/20 text-[#7477FF] border border-[#7477FF]/30 rounded-full flex items-center justify-center mx-auto mb-3">
               <Sparkles size={28} />
             </div>
 
-            <h3 className="text-xl font-black uppercase tracking-tight text-[#1D1D1F] mb-1">{t.paywallTitle}</h3>
-            <p className="text-xs text-[#6E6E73] mb-5">{t.paywallSubtitle}</p>
+            <h3 className="text-xl font-black uppercase tracking-tight text-white mb-1">{t.paywallTitle}</h3>
+            <p className="text-xs text-[#C5D4CA] mb-5">{t.paywallSubtitle}</p>
 
-            <div className="text-left space-y-2 mb-5 bg-[#F5F5F7] p-4 rounded-[20px] text-xs text-[#1D1D1F] border border-[#AAAAAA]/20">
+            <div className="text-left space-y-2 mb-5 bg-[#1B1A1B] p-4 rounded-[20px] text-xs text-white border border-white/10">
               {[t.proFeature1, t.proFeature2, t.proFeature3, t.proFeature4].map((feat, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <Check size={14} className="text-[#34C759] shrink-0" />
+                  <Check size={14} className="text-[#F9CD61] shrink-0" />
                   <span>{feat}</span>
                 </div>
               ))}
@@ -621,12 +828,12 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                 onClick={() => setIsProSelectedYearly(true)}
                 className={`p-3 rounded-2xl border-2 text-xs font-black flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
                   isProSelectedYearly
-                    ? 'border-[#007AFF] bg-[#007AFF]/10 text-[#007AFF]'
-                    : 'border-[#AAAAAA]/30 bg-[#F5F5F7] text-[#6E6E73]'
+                    ? 'border-[#7477FF] bg-[#7477FF]/20 text-[#7477FF]'
+                    : 'border-white/10 bg-[#1B1A1B] text-[#C5D4CA]'
                 }`}
               >
                 <span className="uppercase tracking-wider">Annuel</span>
-                <span className="text-[#1D1D1F] font-black text-[11px]">{t.proPriceYearly}</span>
+                <span className="text-white font-black text-[11px]">{t.proPriceYearly}</span>
               </button>
 
               <button
@@ -634,25 +841,25 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                 onClick={() => setIsProSelectedYearly(false)}
                 className={`p-3 rounded-2xl border-2 text-xs font-black flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
                   !isProSelectedYearly
-                    ? 'border-[#007AFF] bg-[#007AFF]/10 text-[#007AFF]'
-                    : 'border-[#AAAAAA]/30 bg-[#F5F5F7] text-[#6E6E73]'
+                    ? 'border-[#7477FF] bg-[#7477FF]/20 text-[#7477FF]'
+                    : 'border-white/10 bg-[#1B1A1B] text-[#C5D4CA]'
                 }`}
               >
                 <span className="uppercase tracking-wider">Mensuel</span>
-                <span className="text-[#1D1D1F] font-black text-[11px]">{t.proPriceMonthly}</span>
+                <span className="text-white font-black text-[11px]">{t.proPriceMonthly}</span>
               </button>
             </div>
 
             <div className="space-y-2">
               <button
                 onClick={handleUpgradeToPro}
-                className="w-full py-3.5 bg-[#007AFF] hover:bg-[#0071EB] text-white font-bold text-xs uppercase tracking-wider rounded-full transition-colors cursor-pointer min-h-[48px]"
+                className="w-full py-3.5 bg-[#7477FF] hover:bg-[#5E62FF] text-white font-black text-xs uppercase tracking-wider rounded-full transition-colors cursor-pointer min-h-[48px] shadow-md"
               >
                 {t.activateProBtn}
               </button>
               <button
                 onClick={() => setShowPaywall(false)}
-                className="w-full py-2 text-xs text-[#6E6E73] hover:text-[#1D1D1F] font-semibold cursor-pointer"
+                className="w-full py-2 text-xs text-[#C5D4CA] hover:text-white font-semibold cursor-pointer"
               >
                 {t.maybeLater}
               </button>

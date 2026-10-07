@@ -531,10 +531,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       for (let i = 0; i < files.length; i++) {
         // Map to neat mock assets path as simulated WebP compression
         const defaultPhotos = [
-          "/src/assets/images/category_earphone_1791055767919.jpg",
-          "/src/assets/images/category_watch_1791055778925.jpg",
-          "/src/assets/images/category_laptop_1791055787925.jpg",
-          "/src/assets/images/category_console_1791055796776.jpg"
+          "/src/assets/images/category_earphone_1791055767919.webp",
+          "/src/assets/images/category_watch_1791055778925.webp",
+          "/src/assets/images/category_laptop_1791055787925.webp",
+          "/src/assets/images/category_console_1791055796776.webp"
         ];
         const randomMock = defaultPhotos[Math.floor(Math.random() * defaultPhotos.length)];
         newUrls.push(randomMock);
@@ -655,8 +655,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       price: Math.max(1, Number(formPrice)),
       originalPrice: formOriginalPrice ? Math.max(1, Number(formOriginalPrice)) : undefined,
       category: formCategory,
-      image: formImage.trim() || "/src/assets/images/category_earphone_1791055767919.jpg",
-      gallery: uploadedImages.length > 0 ? uploadedImages : [formImage.trim() || "/src/assets/images/category_earphone_1791055767919.jpg"],
+      image: formImage.trim() || "/src/assets/images/category_earphone_1791055767919.webp",
+      gallery: uploadedImages.length > 0 ? uploadedImages : [formImage.trim() || "/src/assets/images/category_earphone_1791055767919.webp"],
       stock: Math.max(0, Number(formStock)),
       isPopular: formIsPopular,
       isPromo: formIsPromo,
@@ -776,8 +776,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
         stock,
         descriptionFr: descFr,
         descriptionEn: descEn,
-        image: "/src/assets/images/category_earphone_1791055767919.jpg",
-        gallery: ["/src/assets/images/category_earphone_1791055767919.jpg"],
+        image: "/src/assets/images/category_earphone_1791055767919.webp",
+        gallery: ["/src/assets/images/category_earphone_1791055767919.webp"],
         isPopular: false,
         isPromo: false,
         status: 'draft', // bulk uploads default to draft safety
@@ -814,7 +814,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       promoPopup: {
         textFr: popupTextFr.trim(),
         textEn: popupTextEn.trim(),
-        image: popupImage.trim() || "/src/assets/images/category_watch_1791055778925.jpg",
+        image: popupImage.trim() || "/src/assets/images/category_watch_1791055778925.webp",
         enabled: popupEnabled
       },
       heroBanner: {
@@ -822,7 +822,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
         subtitle: heroSubtitle.trim(),
         buttonText: heroBtnText.trim() || "Découvrir",
         buttonLink: heroBtnLink.trim() || "categories",
-        image: heroImage.trim() || "/src/assets/images/hero_headphone_1791055757059.jpg"
+        image: heroImage.trim() || "/src/assets/images/hero_headphone_1791055757059.webp"
       }
     };
 
@@ -1890,7 +1890,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                           {/* Mock Render */}
                           <div className="space-y-3 text-left">
                             <div className="aspect-square bg-white rounded-2xl p-4 overflow-hidden flex items-center justify-center relative border border-[#AAAAAA]/20">
-                              <img src={formImage || "/src/assets/images/category_earphone_1791055767919.jpg"} className="max-h-36 object-contain" />
+                              <img src={formImage || "/src/assets/images/category_earphone_1791055767919.webp"} className="max-h-36 object-contain" />
                               <span className="absolute top-2 left-2 px-2 py-0.5 bg-[#007AFF] text-white text-[8px] font-black uppercase rounded-full">
                                 {formCategory}
                               </span>
@@ -2240,7 +2240,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                         {promoCodes.map((c) => (
                           <tr key={c.code} className="hover:bg-[#F5F5F7]/70">
                             <td className="p-4">
-                              <span className="font-extrabold text-[#007AFF] font-mono block text-sm">{c.code}</span>
+                              <span className="font-extrabold text-[#7477FF] font-mono block text-sm">{c.code}</span>
                             </td>
                             <td className="p-4 font-mono">
                               {c.discountType === 'percentage' ? `${c.discountValue}%` : `${formatPrice(c.discountValue)}`}
@@ -2268,10 +2268,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                 <div className="space-y-4 animate-fadeIn">
                   <div className="bg-white border border-[#AAAAAA]/30 p-6 rounded-[28px] text-[#1D1D1F] space-y-4 shadow-xs">
                     <div className="flex justify-between items-center border-b border-[#AAAAAA]/20 pb-3">
-                      <h4 className="text-xs font-black uppercase tracking-widest text-[#007AFF]">
+                      <h4 className="text-xs font-black uppercase tracking-widest text-[#7477FF]">
                         {lang === 'fr' ? 'Journal des tentatives de paiement PayGate' : 'PayGate Payment Attempts Journal'}
                       </h4>
-                      <span className="text-[10px] bg-[#007AFF]/10 text-[#007AFF] px-2.5 py-1 rounded-full font-mono uppercase font-bold">
+                      <span className="text-[10px] bg-[#7477FF]/10 text-[#7477FF] px-2.5 py-1 rounded-full font-mono uppercase font-bold">
                         {paymentLogs.length} tentatives
                       </span>
                     </div>
@@ -2325,14 +2325,14 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               {adminSubTab === 'audit-logs' && (
                 <div className="space-y-4 animate-fadeIn">
                   <div className="bg-white border border-[#AAAAAA]/30 p-6 rounded-[28px] text-[#1D1D1F] shadow-xs">
-                    <h4 className="text-xs font-black uppercase tracking-widest text-[#007AFF] mb-4">Historique d'audit d'administration</h4>
+                    <h4 className="text-xs font-black uppercase tracking-widest text-[#7477FF] mb-4">Historique d'audit d'administration</h4>
                     
                     <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
                       {auditLogs.map((log, idx) => (
                         <div key={idx} className="bg-[#F5F5F7] p-3.5 rounded-xl border border-[#AAAAAA]/20 space-y-1 text-xs">
                           <div className="flex justify-between items-center text-[10px] text-[#6E6E73] font-mono">
                             <span>{new Date(log.timestamp).toLocaleString()}</span>
-                            <span className="text-[#007AFF] font-bold">{log.email}</span>
+                            <span className="text-[#7477FF] font-bold">{log.email}</span>
                           </div>
                           <div className="font-extrabold text-[#1D1D1F] text-xs">{log.action}</div>
                           <p className="text-[#6E6E73] text-[11px] leading-relaxed">{log.details}</p>

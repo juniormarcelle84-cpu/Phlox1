@@ -42,7 +42,7 @@ export const TOGO_CITIES: TogoCityOption[] = [
   }
 ];
 
-export const FALLBACK_PRODUCT_IMAGE = '/src/assets/images/hero_headphone_1791055757059.jpg';
+export const FALLBACK_PRODUCT_IMAGE = '/src/assets/images/hero_headphone_1791055757059.webp';
 
 const INITIAL_PRODUCTS: Product[] = [
   {
@@ -53,10 +53,10 @@ const INITIAL_PRODUCTS: Product[] = [
     price: 145000,
     originalPrice: 185000,
     category: "earphone",
-    image: "/src/assets/images/hero_headphone_1791055757059.jpg",
+    image: "/src/assets/images/hero_headphone_1791055757059.webp",
     gallery: [
-      "/src/assets/images/hero_headphone_1791055757059.jpg",
-      "/src/assets/images/category_earphone_1791055767919.jpg"
+      "/src/assets/images/hero_headphone_1791055757059.webp",
+      "/src/assets/images/category_earphone_1791055767919.webp"
     ],
     variants: [
       {
@@ -78,8 +78,8 @@ const INITIAL_PRODUCTS: Product[] = [
     price: 25000,
     originalPrice: 35000,
     category: "earphone",
-    image: "/src/assets/images/category_earphone_1791055767919.jpg",
-    gallery: ["/src/assets/images/category_earphone_1791055767919.jpg"],
+    image: "/src/assets/images/category_earphone_1791055767919.webp",
+    gallery: ["/src/assets/images/category_earphone_1791055767919.webp"],
     variants: [
       {
         nameEn: "Edition",
@@ -99,8 +99,8 @@ const INITIAL_PRODUCTS: Product[] = [
     price: 49000,
     originalPrice: 65000,
     category: "watch",
-    image: "/src/assets/images/category_watch_1791055778925.jpg",
-    gallery: ["/src/assets/images/category_watch_1791055778925.jpg"],
+    image: "/src/assets/images/category_watch_1791055778925.webp",
+    gallery: ["/src/assets/images/category_watch_1791055778925.webp"],
     variants: [
       {
         nameEn: "Strap",
@@ -121,8 +121,8 @@ const INITIAL_PRODUCTS: Product[] = [
     price: 950000,
     originalPrice: 1100000,
     category: "laptop",
-    image: "/src/assets/images/category_laptop_1791055787925.jpg",
-    gallery: ["/src/assets/images/category_laptop_1791055787925.jpg"],
+    image: "/src/assets/images/category_laptop_1791055787925.webp",
+    gallery: ["/src/assets/images/category_laptop_1791055787925.webp"],
     variants: [
       {
         nameEn: "Keyboard Layout",
@@ -141,8 +141,8 @@ const INITIAL_PRODUCTS: Product[] = [
     descriptionFr: "Découvrez un gameplay 4K fluide, des temps de chargement ultra-rapides grâce à un SSD ultra-haute vitesse, et une immersion profonde grâce au retour haptique.",
     price: 420000,
     category: "console",
-    image: "/src/assets/images/category_console_1791055796776.jpg",
-    gallery: ["/src/assets/images/category_console_1791055796776.jpg"],
+    image: "/src/assets/images/category_console_1791055796776.webp",
+    gallery: ["/src/assets/images/category_console_1791055796776.webp"],
     variants: [
       {
         nameEn: "Bundle",
@@ -162,8 +162,8 @@ const INITIAL_PRODUCTS: Product[] = [
     price: 295000,
     originalPrice: 350000,
     category: "vr",
-    image: "/src/assets/images/category_vr_1791055806396.jpg",
-    gallery: ["/src/assets/images/category_vr_1791055806396.jpg"],
+    image: "/src/assets/images/category_vr_1791055806396.webp",
+    gallery: ["/src/assets/images/category_vr_1791055806396.webp"],
     variants: [
       {
         nameEn: "Storage",
@@ -183,8 +183,8 @@ const INITIAL_PRODUCTS: Product[] = [
     descriptionFr: "Enceinte Bluetooth étanche avec basses puissantes et profondes, anneaux lumineux synchronisés avec le rythme, et jusqu'à 24h d'autonomie.",
     price: 35000,
     category: "speaker",
-    image: "/src/assets/images/category_speaker_1791055819762.jpg",
-    gallery: ["/src/assets/images/category_speaker_1791055819762.jpg"],
+    image: "/src/assets/images/category_speaker_1791055819762.webp",
+    gallery: ["/src/assets/images/category_speaker_1791055819762.webp"],
     variants: [
       {
         nameEn: "Color",
@@ -253,13 +253,20 @@ const INITIAL_ORDERS: Order[] = [
 ];
 
 export const getProducts = (): Product[] => {
+  const normalizeProduct = (p: Product): Product => ({
+    ...p,
+    image: p.image?.replace(/\.jpg$/i, '.webp') || FALLBACK_PRODUCT_IMAGE,
+    gallery: (p.gallery || [p.image]).map((img) => img?.replace(/\.jpg$/i, '.webp') || FALLBACK_PRODUCT_IMAGE)
+  });
+
   const stored = localStorage.getItem('phlox_products');
   if (!stored) {
     localStorage.setItem('phlox_products', JSON.stringify(INITIAL_PRODUCTS));
     return INITIAL_PRODUCTS;
   }
   try {
-    return JSON.parse(stored);
+    const parsed: Product[] = JSON.parse(stored);
+    return parsed.map(normalizeProduct);
   } catch (e) {
     console.error("Error parsing stored products, resetting to initial", e);
     localStorage.setItem('phlox_products', JSON.stringify(INITIAL_PRODUCTS));
@@ -513,7 +520,7 @@ const INITIAL_PROMO_BANNER: PromoBannerConfig = {
   titleRight: 'Summer Sale',
   descriptionFr: 'Profitez de notre réduction exceptionnelle sur la gamme audio sans fil haute fidélité avec livraison express à Lomé et dans tout le Togo.',
   descriptionEn: 'Enjoy our special discount on the high-fidelity wireless audio lineup with express delivery in Lomé and across Togo.',
-  image: '/src/assets/images/hero_headphone_1791055757059.jpg',
+  image: '/src/assets/images/hero_headphone_1791055757059.webp',
   targetCategory: 'earphone'
 };
 

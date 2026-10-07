@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FALLBACK_PRODUCT_IMAGE } from '../services/storeService';
+import { toWebpUrl } from './LazyImage';
 
 interface CutoutImageProps {
   src: string;
@@ -19,13 +20,15 @@ export const CutoutProductImage: React.FC<CutoutImageProps> = ({
   className = '',
   tintRed = false
 }) => {
-  const [processedSrc, setProcessedSrc] = useState<string>(src);
+  const normalizedSrc = toWebpUrl(src);
+  const [processedSrc, setProcessedSrc] = useState<string>(normalizedSrc);
 
   useEffect(() => {
     let isMounted = true;
+    const resolved = toWebpUrl(src);
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    img.src = src;
+    img.src = resolved;
 
     img.onload = () => {
       try {

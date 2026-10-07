@@ -34,6 +34,7 @@ import {
 } from '../services/paygateService';
 import { processOrderCompletionAffiliation } from '../services/affiliationService';
 import { PaymentNetworkLogo } from './PaymentNetworkLogo';
+import { LazyImage } from './LazyImage';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -919,16 +920,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         key={item.id}
                         className="bg-[#312F30] p-3.5 rounded-[20px] flex gap-3 relative border-none text-white"
                       >
-                        <img
+                        <LazyImage
                           src={item.product.image}
                           alt={item.product.name}
-                          loading="lazy"
-                          decoding="async"
-                          referrerPolicy="no-referrer"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = FALLBACK_PRODUCT_IMAGE;
-                          }}
-                          className="w-14 h-14 object-cover rounded-xl bg-[#1B1A1B] shrink-0"
+                          wrapperClassName="w-14 h-14 rounded-xl bg-[#1B1A1B] shrink-0"
+                          className="w-14 h-14 object-cover rounded-xl"
                         />
                         <div className="flex-1 flex flex-col justify-between min-w-0">
                           <div>
@@ -1081,58 +1077,73 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 {/* Choix du réseau Mobile Money */}
-                <div className="bg-[#312F30] rounded-[24px] p-4 space-y-3">
+                <div className="bg-[#312F30] rounded-[24px] p-4 space-y-3.5 border border-white/5">
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-white mb-2">
-                      1. Choix du réseau Mobile Money <span className="text-[#F66554]">*</span>
-                    </label>
+                    <div className="flex items-center justify-between mb-2.5">
+                      <label className="block text-xs font-black uppercase tracking-wider text-white">
+                        1. Choix du réseau Mobile Money <span className="text-[#F66554]">*</span>
+                      </label>
+                      <span className="text-[10px] font-bold text-[#F9CD61] uppercase tracking-wider">
+                        Togo (+228)
+                      </span>
+                    </div>
                     <div className="grid grid-cols-2 gap-3">
-                      {/* Carte 1 : Mixx by Yas */}
+                      {/* Carte 1 : Mixx by Yas (Togocom) */}
                       <button
                         type="button"
                         onClick={() => setPaymentMode('TMONEY')}
-                        className={`relative w-full rounded-[20px] p-3.5 flex flex-col items-center justify-center gap-2.5 transition-all cursor-pointer ${
+                        className={`relative w-full rounded-[22px] p-3.5 flex flex-col items-center justify-center gap-2.5 transition-all cursor-pointer ${
                           paymentMode === 'TMONEY'
-                            ? 'bg-[#1B1A1B] ring-2 ring-[#F66554]'
-                            : 'bg-[#1B1A1B]/60 hover:bg-[#1B1A1B]'
+                            ? 'bg-[#2A2308] ring-2 ring-[#FEDD00] shadow-[0_0_24px_rgba(254,221,0,0.22)]'
+                            : 'bg-[#1B1A1B] border border-white/10 opacity-75 hover:opacity-100 hover:border-white/20'
                         }`}
                       >
                         {paymentMode === 'TMONEY' && (
                           <span
-                            className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[#7477FF] text-white flex items-center justify-center text-[11px] leading-none"
+                            className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-[#FEDD00] text-black font-black flex items-center justify-center text-[11px] leading-none shadow-sm"
                             aria-label="Sélectionné"
                           >
                             ✓
                           </span>
                         )}
                         <PaymentNetworkLogo network="TMONEY" variant="tile" />
-                        <span className="text-xs font-black text-white text-center">
-                          Mixx by Yas
-                        </span>
+                        <div className="text-center">
+                          <span className={`block text-xs font-black ${paymentMode === 'TMONEY' ? 'text-[#FEDD00]' : 'text-white'}`}>
+                            Mixx by Yas
+                          </span>
+                          <span className="block text-[10px] text-[#C5D4CA]/80 font-semibold">
+                            Togocom • USSD *145#
+                          </span>
+                        </div>
                       </button>
 
-                      {/* Carte 2 : Flooz Money */}
+                      {/* Carte 2 : Flooz Money (Moov Africa) */}
                       <button
                         type="button"
                         onClick={() => setPaymentMode('FLOOZ')}
-                        className={`relative w-full rounded-[20px] p-3.5 flex flex-col items-center justify-center gap-2.5 transition-all cursor-pointer ${
+                        className={`relative w-full rounded-[22px] p-3.5 flex flex-col items-center justify-center gap-2.5 transition-all cursor-pointer ${
                           paymentMode === 'FLOOZ'
-                            ? 'bg-[#1B1A1B] ring-2 ring-[#F66554]'
-                            : 'bg-[#1B1A1B]/60 hover:bg-[#1B1A1B]'
+                            ? 'bg-[#0B2038] ring-2 ring-[#0099DA] shadow-[0_0_24px_rgba(0,153,218,0.25)]'
+                            : 'bg-[#1B1A1B] border border-white/10 opacity-75 hover:opacity-100 hover:border-white/20'
                         }`}
                       >
                         {paymentMode === 'FLOOZ' && (
                           <span
-                            className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[#7477FF] text-white flex items-center justify-center text-[11px] leading-none"
+                            className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-[#0099DA] text-white font-black flex items-center justify-center text-[11px] leading-none shadow-sm"
                             aria-label="Sélectionné"
                           >
                             ✓
                           </span>
                         )}
                         <PaymentNetworkLogo network="FLOOZ" variant="tile" />
-                        <span className="text-xs font-black text-white text-center">
-                          Flooz Money
-                        </span>
+                        <div className="text-center">
+                          <span className={`block text-xs font-black ${paymentMode === 'FLOOZ' ? 'text-[#38BDF8]' : 'text-white'}`}>
+                            Flooz Money
+                          </span>
+                          <span className="block text-[10px] text-[#C5D4CA]/80 font-semibold">
+                            Moov Africa • USSD *155#
+                          </span>
+                        </div>
                       </button>
                     </div>
                   </div>
@@ -1140,7 +1151,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Champ "Numéro à débiter" */}
                   <div>
                     <label className="block text-xs font-bold text-[#C5D4CA] mb-1">
-                      Numéro à débiter ({paymentMode === 'FLOOZ' ? 'Flooz Money' : 'Mixx by Yas'}){' '}
+                      Numéro à débiter (
+                      <span className={paymentMode === 'TMONEY' ? 'text-[#FEDD00]' : 'text-[#38BDF8]'}>
+                        {paymentMode === 'FLOOZ' ? 'Flooz Money' : 'Mixx by Yas'}
+                      </span>
+                      ){' '}
                       <span className="text-[#F66554]">*</span>
                     </label>
                     <input
@@ -1158,11 +1173,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       className={`w-full text-white placeholder:text-white/40 text-sm px-4 py-3 rounded-full border-none transition-all focus:outline-hidden font-mono min-h-[48px] ${
                         highlightedFields.includes('debitPhone')
                           ? 'bg-[#F66554]/20 ring-2 ring-[#F66554]'
-                          : 'bg-[#1B1A1B]'
+                          : paymentMode === 'TMONEY'
+                          ? 'bg-[#1B1A1B] focus:ring-2 focus:ring-[#FEDD00]/50'
+                          : 'bg-[#1B1A1B] focus:ring-2 focus:ring-[#0099DA]/50'
                       }`}
                     />
                     <span className="block text-[11px] text-[#C5D4CA] mt-1">
-                      Pré-rempli avec votre numéro. Modifiez-le si vous payez depuis un autre téléphone.
+                      Pré-rempli avec votre numéro. Modifiez-le si vous payez depuis un autre compte Mobile Money.
                     </span>
                   </div>
                 </div>

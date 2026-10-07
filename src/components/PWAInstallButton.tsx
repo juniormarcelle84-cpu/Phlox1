@@ -19,7 +19,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ lang }) => {
     return (
       <button
         onClick={install}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#007AFF]/10 hover:bg-[#007AFF]/20 text-[#007AFF] rounded-full text-xs font-bold transition-all cursor-pointer"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#7477FF]/20 hover:bg-[#7477FF] text-[#7477FF] hover:text-white border border-[#7477FF]/30 rounded-full text-xs font-bold transition-all cursor-pointer"
         aria-label={lang === 'fr' ? "Installer l'application Phlox Togo" : 'Install Phlox Togo App'}
       >
         <Download size={13} />
@@ -33,7 +33,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ lang }) => {
       <>
         <button
           onClick={() => setShowIOSGuide(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F5F5F7] hover:bg-[#F5F5F7]/80 text-[#1D1D1F] border border-[#AAAAAA]/30 rounded-full text-xs font-bold transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#312F30] hover:bg-[#312F30]/80 text-[#FFFFFF] border border-white/15 rounded-full text-xs font-bold transition-all cursor-pointer"
           aria-label={lang === 'fr' ? 'Installer sur iPhone' : 'Install on iOS'}
         >
           <Share size={13} />
@@ -41,29 +41,29 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ lang }) => {
         </button>
 
         {showIOSGuide && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1D1D1F]/45 backdrop-blur-sm p-4 animate-fadeIn">
-            <div className="relative w-full max-w-sm rounded-[24px] bg-white p-6 text-[#1D1D1F] text-center shadow-2xl border border-[#AAAAAA]/30">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1B1A1B]/80 backdrop-blur-md p-4 animate-fadeIn">
+            <div className="relative w-full max-w-sm rounded-[24px] bg-[#312F30] p-6 text-white text-center shadow-2xl border border-white/15">
               <button
                 onClick={() => setShowIOSGuide(false)}
-                className="absolute top-4 right-4 p-2 text-[#6E6E73] hover:text-[#1D1D1F] rounded-full transition-colors cursor-pointer"
+                className="absolute top-4 right-4 p-2 text-[#C5D4CA] hover:text-white rounded-full transition-colors cursor-pointer"
                 aria-label="Fermer"
               >
                 <X size={18} />
               </button>
 
-              <div className="w-12 h-12 bg-[#007AFF]/10 text-[#007AFF] rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-[#7477FF]/20 text-[#7477FF] border border-[#7477FF]/30 rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <Download size={22} />
               </div>
 
-              <h3 className="text-lg font-black uppercase text-[#1D1D1F] mb-2">
+              <h3 className="text-lg font-black uppercase text-white mb-2">
                 {lang === 'fr' ? 'Installer sur iPhone / iPad' : 'Install on iPhone / iPad'}
               </h3>
 
-              <div className="text-left text-xs text-[#6E6E73] space-y-2 bg-[#F5F5F7] border border-[#AAAAAA]/20 p-4 rounded-2xl mb-4">
+              <div className="text-left text-xs text-[#C5D4CA] space-y-2 bg-[#1B1A1B] border border-white/10 p-4 rounded-2xl mb-4">
                 <p>
                   1. {lang === 'fr' ? 'Appuyez sur le bouton' : 'Tap the'}{' '}
-                  <strong className="text-[#1D1D1F]">{lang === 'fr' ? 'Partager' : 'Share'}</strong>{' '}
-                  <Share size={12} className="inline mx-1 text-[#007AFF]" />{' '}
+                  <strong className="text-white">{lang === 'fr' ? 'Partager' : 'Share'}</strong>{' '}
+                  <Share size={12} className="inline mx-1 text-[#7477FF]" />{' '}
                   {lang === 'fr' ? 'dans Safari.' : 'in Safari toolbar.'}
                 </p>
                 <p>
@@ -71,7 +71,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ lang }) => {
                   {lang === 'fr'
                     ? 'Faites défiler vers le bas et sélectionnez'
                     : 'Scroll down and select'}{' '}
-                  <strong className="text-[#1D1D1F]">
+                  <strong className="text-white">
                     « {lang === 'fr' ? "Sur l'écran d'accueil" : 'Add to Home Screen'} »
                   </strong>
                   .
@@ -80,7 +80,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ lang }) => {
 
               <button
                 onClick={() => setShowIOSGuide(false)}
-                className="w-full py-3 bg-[#007AFF] text-white font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#0071EB] transition-colors cursor-pointer"
+                className="w-full py-3 bg-[#7477FF] text-white font-black text-xs uppercase tracking-wider rounded-full hover:bg-[#5E62FF] transition-colors cursor-pointer shadow-md"
               >
                 {lang === 'fr' ? "J'ai compris" : 'Got it'}
               </button>

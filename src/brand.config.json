@@ -19,15 +19,22 @@
     "proPlanYearly": 57000
   },
   "colors": {
-    "bg": "#F5F5F7",
-    "surface": "#FFFFFF",
-    "ink": "#1D1D1F",
-    "muted": "#AAAAAA",
-    "text2": "#6E6E73",
-    "accent": "#007AFF",
-    "success": "#34C759",
-    "error": "#FF3B30",
-    "warning": "#FF9500"
+    "bg": "#121214",
+    "surface": "#202024",
+    "ink": "#FFFFFF",
+    "muted": "#A1A1AA",
+    "text2": "#71717A",
+    "accent": "#00BCC8",
+    "cyan": "#00BCC8",
+    "lime": "#D0FF00",
+    "coral": "#F66554",
+    "yellow": "#D0FF00",
+    "sage": "#00BCC8",
+    "success": "#D0FF00",
+    "error": "#F66554",
+    "warning": "#D0FF00",
+    "mixxYellow": "#FEDD00",
+    "floozBlue": "#0099DA"
   },
   "advantages": [
     {
@@ -85,7 +92,7 @@
       "enName": "With Earphone",
       "frName": "Écouteurs",
       "color": "#1D1D1F",
-      "image": "/src/assets/images/category_earphone_1791055767919.jpg",
+      "image": "/src/assets/images/category_earphone_1791055767919.webp",
       "tagline": "Enjoy"
     },
     {
@@ -93,7 +100,7 @@
       "enName": "Wearable Gadget",
       "frName": "Montres Connectées",
       "color": "#007AFF",
-      "image": "/src/assets/images/category_watch_1791055778925.jpg",
+      "image": "/src/assets/images/category_watch_1791055778925.webp",
       "tagline": "New"
     },
     {
@@ -101,7 +108,7 @@
       "enName": "Devices Laptop",
       "frName": "Ordinateurs",
       "color": "#1D1D1F",
-      "image": "/src/assets/images/category_laptop_1791055787925.jpg",
+      "image": "/src/assets/images/category_laptop_1791055787925.webp",
       "tagline": "Trend"
     },
     {
@@ -109,7 +116,7 @@
       "enName": "Gaming Console",
       "frName": "Consoles de Jeux",
       "color": "#6E6E73",
-      "image": "/src/assets/images/category_console_1791055796776.jpg",
+      "image": "/src/assets/images/category_console_1791055796776.webp",
       "tagline": "Best"
     },
     {
@@ -117,7 +124,7 @@
       "enName": "Game Oculus",
       "frName": "Casques VR",
       "color": "#007AFF",
-      "image": "/src/assets/images/category_vr_1791055806396.jpg",
+      "image": "/src/assets/images/category_vr_1791055806396.webp",
       "tagline": "Play"
     },
     {
@@ -125,7 +132,7 @@
       "enName": "Amazon Speaker",
       "frName": "Enceintes Bluetooth",
       "color": "#1D1D1F",
-      "image": "/src/assets/images/category_speaker_1791055819762.jpg",
+      "image": "/src/assets/images/category_speaker_1791055819762.webp",
       "tagline": "Now"
     }
   ],

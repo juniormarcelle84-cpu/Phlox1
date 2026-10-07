@@ -1,14 +1,88 @@
-# Block direct web access to state files, configs, and logs
-<FilesMatch "\.(json|log|db|lock|sqlite|md|env)$">
-    Order allow,deny
-    Deny from all
+# ==============================================================================
+# PHLOX TOGO - Apache & InfinityFree Configuration (.htaccess)
+# Compatible with InfinityFree, cPanel, Apache 2.4+, OpenLiteSpeed
+# ==============================================================================
+
+# 1. Enable Rewrite Engine
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Redirect HTTP to HTTPS (InfinityFree SSL support)
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Don't rewrite existing files or directories
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Allow direct execution of PHP endpoints
+    RewriteRule ^api/(.*)$ api/$1 [L]
+    RewriteRule ^paygate-callback\.php$ paygate-callback.php [L]
+
+    # SPA History Mode Fallback (React Router / Hashless navigation)
+    RewriteRule ^ index.html [L]
+</IfModule>
+
+# 2. Prevent Direct Access to Sensitive Files and Directories
+<FilesMatch "(^\.env|\.git|\.lock|\.json|\.log|\.db|\.sqlite|\.md)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
-# Security Headers
+# Allow public webmanifest and JSON-LD schema/manifest
+<FilesMatch "(manifest\.webmanifest|brand\.config\.json)$">
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
+</FilesMatch>
+
+# 3. Security Headers
 <IfModule mod_headers.c>
-    Header set Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://paygateglobal.com; img-src 'self' data: https:;"
-    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
     Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
-    Header set X-Frame-Options "DENY"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
+</IfModule>
+
+# 4. MIME Types Configuration
+<IfModule mod_mime.c>
+    AddType application/manifest+json .webmanifest
+    AddType application/json .json
+    AddType image/svg+xml .svg
+    AddType application/javascript .js
+    AddType text/css .css
+    AddType font/woff2 .woff2
+    AddType font/woff .woff
+    AddType font/ttf .ttf
+</IfModule>
+
+# 5. Gzip Compression (mod_deflate)
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/xml application/xhtml+xml application/rss+xml image/svg+xml
+</IfModule>
+
+# 6. Browser Caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType application/json "access plus 0 seconds"
+    ExpiresByType application/manifest+json "access plus 1 day"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
 </IfModule>

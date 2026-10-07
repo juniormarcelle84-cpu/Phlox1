@@ -29,7 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
 $paygateToken = getenv('PAYGATE_API_KEY') ?: '';
 
-$dataDir = dirname(__DIR__, 2) . '/data';
+$dataDir = is_dir(dirname(__DIR__) . '/data')
+    ? dirname(__DIR__) . '/data'
+    : (is_dir(dirname(__DIR__, 2) . '/data') ? dirname(__DIR__, 2) . '/data' : dirname(__DIR__) . '/data');
 if (!is_dir($dataDir)) {
     @mkdir($dataDir, 0755, true);
 }

@@ -14,15 +14,15 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({ lang }) => {
 
   return (
     <div 
-      className="fixed bottom-24 left-6 z-50 flex items-center gap-2 rounded-full bg-[#FF3B30] px-4 py-2 text-xs font-bold text-white shadow-2xl animate-bounce"
+      className="fixed bottom-24 left-6 z-50 flex items-center gap-2 rounded-full bg-[#F66554] px-4 py-2 text-xs font-black uppercase tracking-wider text-white shadow-2xl animate-bounce border border-white/20"
       role="status"
       aria-live="polite"
     >
       <WifiOff size={14} />
       <span>
         {lang === 'fr' 
-          ? "Mode Hors-ligne — Navigation sur données en cache" 
-          : "Offline Mode — Browsing cached data"}
+          ? "Mode Hors-ligne — Données en cache" 
+          : "Offline Mode — Cached data"}
       </span>
     </div>
   );

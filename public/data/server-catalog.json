@@ -1,0 +1,45 @@
+{
+  "products": {
+    "headphone-1": {
+      "name": "Beats Solo Wireless Pro",
+      "price": 145000
+    },
+    "earphone-1": {
+      "name": "Phlox Earphone Gaming TWS",
+      "price": 25000
+    },
+    "watch-1": {
+      "name": "Phlox Smartwatch Active V2",
+      "price": 49000
+    },
+    "laptop-1": {
+      "name": "Phlox Extreme Gaming Laptop",
+      "price": 950000
+    },
+    "console-1": {
+      "name": "Phlox Play Console 5 Pro",
+      "price": 420000
+    },
+    "vr-1": {
+      "name": "Phlox VR Vision Quest",
+      "price": 295000,
+      "variants": {
+        "256 Go": 35000
+      }
+    },
+    "speaker-1": {
+      "name": "Phlox Cylindrical smart Bass Pro",
+      "price": 35000
+    }
+  },
+  "cityDeliveryFees": {
+    "Lomé": 1000,
+    "Kpalimé": 2500,
+    "Atakpamé": 2500,
+    "Sokodé": 3000,
+    "Kara": 3500,
+    "Dapaong": 4000,
+    "Aného": 1500,
+    "Tsévié": 1500
+  }
+}

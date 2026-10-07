@@ -3,60 +3,256 @@
 @theme {
   --font-sans: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: "Archivo", sans-serif;
+  --font-heading: "Archivo", sans-serif;
 
-  --color-bg: #F5F5F7;
-  --color-surface: #FFFFFF;
-  --color-ink: #1D1D1F;
-  --color-muted: #AAAAAA;
-  --color-text-2: #6E6E73;
-  --color-accent: #007AFF;
-  --color-success: #34C759;
-  --color-error: #FF3B30;
-  --color-warning: #FF9500;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-text-2: var(--text-2);
+  --color-accent: var(--accent);
+  --color-cyan: var(--cyan);
+  --color-lime: var(--lime);
+  --color-coral: var(--coral);
+  --color-yellow: var(--yellow);
+  --color-sage: var(--sage);
+  --color-success: var(--success);
+  --color-mixx: var(--mixx);
+  --color-flooz: var(--flooz);
 }
 
-:root {
-  --bg: #F5F5F7;
+:root,
+:root[data-theme="dark"],
+.dark {
+  --bg: #121214;
+  --surface: #202024;
+  --surface-hover: #2C2C32;
+  --surface-active: #18181A;
+  --ink: #FFFFFF;
+  --muted: #A1A1AA;
+  --text-2: #71717A;
+  --accent: #00BCC8;
+  --cyan: #00BCC8;
+  --lime: #D0FF00;
+  --coral: #F66554;
+  --yellow: #D0FF00;
+  --sage: #00BCC8;
+  --success: #D0FF00;
+  --mixx: #FEDD00;
+  --flooz: #0099DA;
+  --border-subtle: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(0, 188, 200, 0.35);
+  --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --header-bg: rgba(18, 18, 20, 0.95);
+  --scrollbar-track: #121214;
+  --scrollbar-thumb: #202024;
+
+  font-family: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"],
+.light {
+  --bg: #F4F8F8;
   --surface: #FFFFFF;
-  --ink: #1D1D1F;
-  --muted: #AAAAAA;
-  --text-2: #6E6E73;
-  --accent: #007AFF;
-  --success: #34C759;
-  --error: #FF3B30;
-  --warning: #FF9500;
+  --surface-hover: #EBF3F3;
+  --surface-active: #DFEEEE;
+  --ink: #101415;
+  --muted: #4B5563;
+  --text-2: #6B7280;
+  --accent: #009DA7;
+  --cyan: #00BCC8;
+  --lime: #8BB800;
+  --coral: #EF4444;
+  --yellow: #8BB800;
+  --sage: #009DA7;
+  --success: #16A34A;
+  --mixx: #FEDD00;
+  --flooz: #0099DA;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 188, 200, 0.40);
+  --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.06);
+  --header-bg: rgba(244, 248, 248, 0.95);
+  --scrollbar-track: #F4F8F8;
+  --scrollbar-thumb: #D1D5DB;
 
   color-scheme: light;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #F5F5F7;
-  color: #1D1D1F;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 body {
-  font-family: var(--font-sans);
-  background-color: #F5F5F7;
-  color: #1D1D1F;
+  font-family: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg);
+  color: var(--ink);
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.55;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-/* Typography Constitution */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
+/* Light Mode Global Adaptations */
+[data-theme="light"] .bg-\[\#1B1A1B\],
+[data-theme="light"] .bg-\[\#121214\],
+[data-theme="light"] .bg-\[\#1B1A1B\]\/95 {
+  background-color: var(--bg) !important;
+}
+
+[data-theme="light"] .bg-\[\#312F30\],
+[data-theme="light"] .bg-\[\#202024\] {
+  background-color: var(--surface) !important;
+  color: var(--ink) !important;
+  box-shadow: var(--card-shadow);
+}
+
+[data-theme="light"] .text-white {
+  color: var(--ink) !important;
+}
+
+[data-theme="light"] .text-\[\#C5D4CA\],
+[data-theme="light"] .text-\[\#A1A1AA\] {
+  color: var(--muted) !important;
+}
+
+[data-theme="light"] .text-white\/90,
+[data-theme="light"] .text-white\/80,
+[data-theme="light"] .text-white\/70 {
+  color: var(--muted) !important;
+}
+
+[data-theme="light"] .text-white\/5 {
+  color: rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="light"] .border-white\/10,
+[data-theme="light"] .border-white\/15,
+[data-theme="light"] .border-white\/20,
+[data-theme="light"] .border-white\/5 {
+  border-color: var(--border-subtle) !important;
+}
+
+[data-theme="light"] .hover\:text-white:hover {
+  color: var(--ink) !important;
+}
+
+[data-theme="light"] .hover\:bg-\[\#1B1A1B\]:hover,
+[data-theme="light"] .hover\:bg-\[\#121214\]:hover {
+  background-color: var(--surface-hover) !important;
+}
+
+[data-theme="light"] .hover\:bg-white\/10:hover {
+  background-color: var(--surface-hover) !important;
+}
+
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+  background-color: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--border-strong) !important;
+}
+
+[data-theme="light"] .btn-secondary {
+  background-color: var(--surface);
+  color: var(--ink);
+  border-color: var(--border-strong);
+}
+
+[data-theme="light"] .btn-secondary:hover {
+  background-color: var(--surface-hover);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Electric Cyan & Lime High Conversion Classes */
+.glow-cyan {
+  box-shadow: 0 0 24px rgba(0, 188, 200, 0.45);
+}
+
+.glow-lime {
+  box-shadow: 0 0 24px rgba(208, 255, 0, 0.45);
+}
+
+.btn-cyan {
+  background-color: #00BCC8;
+  color: #121214;
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-cyan:hover {
+  background-color: #00D5E4;
+  box-shadow: 0 0 20px rgba(0, 188, 200, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-lime {
+  background-color: #D0FF00;
+  color: #121214;
+  font-weight: 900;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-lime:hover {
+  background-color: #DEFF33;
+  box-shadow: 0 0 25px rgba(208, 255, 0, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Form elements & buttons systematically inherit Archivo */
+input,
+button,
+textarea,
+select,
+optgroup,
+option,
+label,
+summary,
+dialog {
+  font-family: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings: Archivo bold uppercase with balanced wrapping and sleek tracking */
+h1, h2, h3, h4, h5, h6, .heading-bold {
+  font-family: "Archivo", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.025em;
   text-wrap: balance;
-  color: #1D1D1F;
+  color: #FFFFFF;
+}
+
+/* Specialized Typography Utilities */
+.font-display {
+  font-family: "Archivo", sans-serif;
+}
+
+.font-body {
+  font-family: "Archivo", sans-serif;
 }
 
 /* Tabular numbers for clean prices and timers */
@@ -65,23 +261,24 @@ h1, h2, h3, h4, h5, h6 {
   font-feature-settings: "tnum";
 }
 
-/* Custom scrollbar in Apple Modern UI */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F5F5F7;
+  background: #1B1A1B;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #AAAAAA;
+  background: #312F30;
   border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6E6E73;
+  background: #7477FF;
 }
 
 /* Focus styles for keyboard accessibility */
@@ -90,45 +287,112 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #007AFF;
+  outline: 2px solid #7477FF;
   outline-offset: 2px;
 }
 
-/* Apple Modern standard buttons */
+/* High-conversion button styles */
 .btn-primary {
-  background-color: #007AFF;
+  background-color: #7477FF;
   color: #FFFFFF;
-  font-weight: 600;
-  transition: all 0.15s ease-in-out;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(116, 119, 255, 0.35);
 }
 .btn-primary:hover {
-  background-color: #0071EB;
+  background-color: #5E62FF;
+  box-shadow: 0 6px 20px rgba(116, 119, 255, 0.5);
+  transform: translateY(-1px);
 }
 .btn-primary:active {
-  background-color: #0066D6;
+  background-color: #4C50E6;
+  transform: translateY(0);
 }
 .btn-primary:disabled {
-  background-color: #AAAAAA;
+  background-color: #312F30;
+  box-shadow: none;
   opacity: 0.35;
   cursor: not-allowed;
 }
 
 .btn-secondary {
-  background-color: #FFFFFF;
-  color: #1D1D1F;
-  border: 1px solid #AAAAAA;
-  font-weight: 600;
-  transition: all 0.15s ease-in-out;
+  background-color: #312F30;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 700;
+  transition: all 0.2s ease-in-out;
 }
 .btn-secondary:hover {
-  background-color: #F5F5F7;
+  background-color: #3D3A3B;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 .btn-secondary:active {
-  background-color: #E5E5EA;
+  background-color: #272526;
 }
 .btn-secondary:disabled {
   opacity: 0.35;
   cursor: not-allowed;
+}
+
+/* Urgency Coral CTA */
+.btn-coral {
+  background-color: #F66554;
+  color: #FFFFFF;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(246, 101, 84, 0.35);
+}
+.btn-coral:hover {
+  background-color: #e45342;
+  box-shadow: 0 6px 20px rgba(246, 101, 84, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Warm Gold High-Value CTA */
+.btn-gold {
+  background-color: #F9CD61;
+  color: #1B1A1B;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(249, 205, 97, 0.3);
+}
+.btn-gold:hover {
+  background-color: #ffda73;
+  box-shadow: 0 6px 20px rgba(249, 205, 97, 0.45);
+  transform: translateY(-1px);
+}
+
+/* WhatsApp Direct Emerald CTA */
+.btn-whatsapp {
+  background-color: #25D366;
+  color: #FFFFFF;
+  font-weight: 800;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+}
+.btn-whatsapp:hover {
+  background-color: #20ba59;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Glow utility classes */
+.glow-accent {
+  box-shadow: 0 0 25px rgba(116, 119, 255, 0.25);
+}
+
+.glow-coral {
+  box-shadow: 0 0 25px rgba(246, 101, 84, 0.25);
+}
+
+.glow-yellow {
+  box-shadow: 0 0 25px rgba(249, 205, 97, 0.25);
 }
 
 /* Safe area padding utilities */

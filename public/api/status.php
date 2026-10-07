@@ -18,7 +18,9 @@ header('Referrer-Policy: strict-origin-when-cross-origin');
 header('X-Frame-Options: DENY');
 
 $paygateToken = getenv('PAYGATE_API_KEY') ?: '';
-$dataDir = dirname(__DIR__, 2) . '/data';
+$dataDir = is_dir(dirname(__DIR__) . '/data')
+    ? dirname(__DIR__) . '/data'
+    : (is_dir(dirname(__DIR__, 2) . '/data') ? dirname(__DIR__, 2) . '/data' : dirname(__DIR__) . '/data');
 if (!is_dir($dataDir)) {
     @mkdir($dataDir, 0755, true);
 }
